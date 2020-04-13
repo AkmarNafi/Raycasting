@@ -2,6 +2,7 @@ const TILE_SIZE = 32;
 const MAP_NUM_ROWS = 11;
 const MAP_NUM_COLS = 15;
 
+const SCALE=0.3;
 const WINDOW_WIDTH = MAP_NUM_COLS * TILE_SIZE;
 const WINDOW_HEIGHT = MAP_NUM_ROWS * TILE_SIZE;
 
@@ -41,10 +42,10 @@ class Map {
             for (var j = 0; j < MAP_NUM_COLS; j++) {
                 var tileX = j * TILE_SIZE;
                 var tileY = i * TILE_SIZE;
-                var tileColor = this.grid[i][j] == 1 ? "#222" : "#333";
+                var tileColor = this.grid[i][j] == 1 ? "rgb(22,22,22)" : "rgb(52,52,52)";
                 noStroke()
                 fill(tileColor);
-                rect(tileX, tileY, TILE_SIZE, TILE_SIZE);
+                rect(SCALE * tileX,SCALE * tileY,SCALE * TILE_SIZE,SCALE * TILE_SIZE);
             }
         }
     }
@@ -59,7 +60,7 @@ class Player {
         this.walkDirection = 0;
         this.rotationAngle = Math.PI / 2;
         this.moveSpeed = 2.0;
-        this.rotationSpeed = 0.5 * (Math.PI / 180);
+        this.rotationSpeed = 2.5 * (Math.PI / 180);
     }
 
     update() {
@@ -79,7 +80,7 @@ class Player {
     render() {
         noStroke();
         fill("white");
-        circle(this.x, this.y, this.radius);
+        circle(SCALE * this.x,SCALE *  this.y, SCALE * this.radius);
 
     }
 }
@@ -111,9 +112,9 @@ class Ray {
         stroke('white');
 
         if (vertical == null) {
-            line(player.x, player.y, horizontal.x, horizontal.y)
+            line(SCALE * player.x, SCALE * player.y, SCALE * horizontal.x, SCALE * horizontal.y)
         } else if (horizontal == null) {
-            line(player.x, player.y, vertical.x, vertical.y)
+            line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x, SCALE * vertical.y)
 
 
         } else {
@@ -125,12 +126,12 @@ class Ray {
             if (horizontaldist <= verticaldist) {
 
 
-                line(player.x, player.y, horizontal.x, horizontal.y)
+                line(SCALE * player.x,SCALE *  player.y,SCALE *  horizontal.x,SCALE * horizontal.y)
 
 
             } else {
 
-                line(player.x, player.y, vertical.x, vertical.y)
+                line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x,SCALE * vertical.y)
 
             }
         }
@@ -312,6 +313,7 @@ function update() {
 }
 
 function draw() {
+
     update();
 
     grid.render();
