@@ -360,19 +360,24 @@ var mainsketch = function (canvas) {
 
         var x = Math.floor(canvas.mouseX/TILE_SIZE)
         var y = Math.floor(canvas.mouseY/TILE_SIZE);
-        alert(x)
+
+
+        var current=(grid.grid[y][x])
+
+        if(current==0){
+            grid.grid[y][x]=canvas.random([2,3,4])
+
+        }
+       if(current!=1 && current!=0){
+            grid.grid[y][x]=0
+
+        }
 
 
     }
     canvas.keyPressed = function () {
 
-        if (canvas.keyCode == canvas.SHIFT) {
 
-            alert('biches')
-            grid.grid[3][7] = 2
-
-
-        }
 
         if (canvas.keyCode == canvas.UP_ARROW) {
             player.walkDirection = +1;

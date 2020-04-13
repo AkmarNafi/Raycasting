@@ -1,0 +1,43 @@
+[33mcommit 5a0bba05b3250655c08d2c4d5b008324cffbfb16[m
+Author: AkmarNafi <akmar.nafi@gmail.com>
+Date:   Mon Apr 13 21:30:57 2020 +0530
+
+    add and remove cubes
+
+[1mdiff --git a/Raycasting.html b/Raycasting.html[m
+[1mindex 1fdf968..289dbfb 100644[m
+[1m--- a/Raycasting.html[m
+[1m+++ b/Raycasting.html[m
+[36m@@ -17,7 +17,7 @@[m
+ [m
+ [m
+ <p style="color: white;font-family: 'Source Code Pro', monospace;text-align: center">[m
+[31m-  Use arrow keys to move.[m
+[32m+[m[32m Click on the left canvas to add or remove cubes.<br> Use arrow keys to move.[m
+ </p>[m
+ [m
+ [m
+[1mdiff --git a/Raycasting.js b/Raycasting.js[m
+[1mindex e38879b..3a09eda 100644[m
+[1m--- a/Raycasting.js[m
+[1m+++ b/Raycasting.js[m
+[36m@@ -360,7 +360,18 @@[m [mvar mainsketch = function (canvas) {[m
+ [m
+         var x = Math.floor(canvas.mouseX/TILE_SIZE)[m
+         var y = Math.floor(canvas.mouseY/TILE_SIZE);[m
+[31m-        alert(x)[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        var current=(grid.grid[y][x])[m
+[32m+[m
+[32m+[m[32m        if(current==0){[m
+[32m+[m[32m            grid.grid[y][x]=canvas.random([2,3,4])[m
+[32m+[m
+[32m+[m[32m        }[m
+[32m+[m[32m       if(current!=1 && current!=0){[m
+[32m+[m[32m            grid.grid[y][x]=0[m
+[32m+[m
+[32m+[m[32m        }[m
+ [m
+ [m
+     }[m
