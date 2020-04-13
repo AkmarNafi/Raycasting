@@ -360,7 +360,18 @@ var mainsketch = function (canvas) {
 
         var x = Math.floor(canvas.mouseX/TILE_SIZE)
         var y = Math.floor(canvas.mouseY/TILE_SIZE);
-        alert(x)
+
+
+        var current=(grid.grid[y][x])
+
+        if(current==0){
+            grid.grid[y][x]=canvas.random([2,3,4])
+
+        }
+       if(current!=1 && current!=0){
+            grid.grid[y][x]=0
+
+        }
 
 
     }
