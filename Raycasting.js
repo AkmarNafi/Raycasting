@@ -17,15 +17,33 @@ class Map {
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
             [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1],
-            [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1],
-            [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 0, 1],
+            [1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 2, 0, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 1, 1, 0, 1],
+            [1, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 2, 2, 0, 1, 0, 1, 1, 1, 1, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
+    }
+    getColourAt(x,y,alpha){
+
+
+
+        var mapGridIndexX = x;
+        var mapGridIndexY = y;
+
+
+        var colourcode=this.grid[mapGridIndexY][mapGridIndexX]
+
+
+        if(colourcode===0) return `rgba(0,0,0,${alpha})`
+        if(colourcode===1) return `rgba(255,215,0,${alpha})`
+        if(colourcode===2) return `rgba(116,78,163,${alpha})`
+
+
+
     }
 
     hasWallAt(x, y) {
@@ -37,13 +55,25 @@ class Map {
         return this.grid[mapGridIndexY][mapGridIndexX] != 0;
     }
 
+
     render() {
         for (var i = 0; i < MAP_NUM_ROWS; i++) {
             for (var j = 0; j < MAP_NUM_COLS; j++) {
                 var tileX = j * TILE_SIZE;
                 var tileY = i * TILE_SIZE;
-                var tileColor = this.grid[i][j] == 1 ? "rgb(22,22,22)" : "rgb(102,102,102)";
-                stroke(tileColor)
+
+
+
+
+                      var alpha=1/(calculatedistance(player.x,player.y,tileX,tileY)*0.008)
+
+
+                var tileColor= this.getColourAt(j,i,alpha)
+
+
+
+
+
                 fill(tileColor);
                 rect(SCALE * tileX, SCALE * tileY, SCALE * TILE_SIZE, SCALE * TILE_SIZE);
             }
@@ -116,9 +146,13 @@ class Ray {
 
             this.distance = calculatedistance(player.x, player.y, horizontal.x, horizontal.y);
 
+            this.target={x:horizontal.x,y:horizontal.y}
+
             line(SCALE * player.x, SCALE * player.y, SCALE * horizontal.x, SCALE * horizontal.y)
         } else if (horizontal == null) {
             this.distance = calculatedistance(player.x, player.y, vertical.x, vertical.y);
+
+            this.target={x:vertical.x,y:vertical.y}
 
             line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x, SCALE * vertical.y)
 
@@ -132,13 +166,14 @@ class Ray {
 
             if (horizontaldist <= verticaldist) {
                 this.distance = horizontaldist
-
+                this.target={x:horizontal.x,y:horizontal.y}
 
                 line(SCALE * player.x, SCALE * player.y, SCALE * horizontal.x, SCALE * horizontal.y)
 
 
             } else {
                 this.distance = verticaldist
+                this.target={x:vertical.x,y:vertical.y}
                 line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x, SCALE * vertical.y)
 
             }
@@ -314,7 +349,12 @@ function render3dWalls() {
         var distanceToProjectionPlane = (WINDOW_WIDTH / 2) / Math.tan(FOV_ANGLE / 2)
         var wallHeight = (TILE_SIZE / rayDistance) * distanceToProjectionPlane;
 
-        fill('rgba(255,50,0,0.6)');
+
+
+
+
+        var alpha=wallHeight*0.008
+        fill(grid.getColourAt(Math.floor(ray.target.x/TILE_SIZE),Math.floor(ray.target.y/TILE_SIZE),alpha));
         noStroke();
         rect(i*WALL_STRIP_WIDTH , (WINDOW_WIDTH/2) - (wallHeight/2),WALL_STRIP_WIDTH,wallHeight)
 
