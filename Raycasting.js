@@ -11,7 +11,10 @@ const FOV_ANGLE = 80 * (Math.PI / 180);
 const WALL_STRIP_WIDTH = 1;
 const NUM_RAYS = WINDOW_WIDTH / WALL_STRIP_WIDTH;
 
-//helper functions
+
+
+
+/////////helper functions
 
 function calculatedistance(x1, y1, x2, y2) {
 
@@ -26,6 +29,11 @@ function normalizeAngle(angle) {
     return angle;
 }
 
+
+
+
+
+/////// right canvas
 
 var subsketch = function (canvas) {
 
@@ -49,6 +57,15 @@ var subsketch = function (canvas) {
 
 var canvas3d = new p5(subsketch)
 
+
+
+
+
+
+
+
+
+/////// left canvas
 
 var mainsketch = function (canvas) {
 
@@ -358,26 +375,24 @@ var mainsketch = function (canvas) {
     canvas.mouseClicked = function () {
 
 
-        var x = Math.floor(canvas.mouseX/TILE_SIZE)
-        var y = Math.floor(canvas.mouseY/TILE_SIZE);
+        var x = Math.floor(canvas.mouseX / TILE_SIZE)
+        var y = Math.floor(canvas.mouseY / TILE_SIZE);
 
 
+        var current = (grid.grid[y][x])
 
-        var current=(grid.grid[y][x])
-
-        if(current==0){
-            grid.grid[y][x]=canvas.random([2,3,4])
+        if (current == 0) {
+            grid.grid[y][x] = canvas.random([2, 3, 4])
 
         }
-       if(current!=1 && current!=0){
-            grid.grid[y][x]=0
+        if (current != 1 && current != 0) {
+            grid.grid[y][x] = 0
 
         }
 
 
     }
     canvas.keyPressed = function () {
-
 
 
         if (canvas.keyCode == canvas.UP_ARROW) {
@@ -438,7 +453,6 @@ var mainsketch = function (canvas) {
 
 
 }
-
 
 var maincanvas = new p5(mainsketch)
 
