@@ -362,6 +362,7 @@ var mainsketch = function (canvas) {
         var y = Math.floor(canvas.mouseY/TILE_SIZE);
 
 
+
         var current=(grid.grid[y][x])
 
         if(current==0){
