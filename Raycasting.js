@@ -15,15 +15,15 @@ class Map {
     constructor() {
         this.grid = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 1, 0, 1],
-            [1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 2, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 1, 1, 0, 1],
-            [1, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 1, 2, 2, 0, 1, 0, 1, 1, 1, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 1],
+            [1, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 3, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 1],
+            [1, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 1],
+            [1, 0, 3, 0, 2, 0, 0, 0, 0, 0, 0, 4, 3, 0, 1],
+            [1, 3, 3, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 1],
+            [1, 0, 3, 0, 0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
     }
@@ -39,8 +39,10 @@ class Map {
 
 
         if(colourcode===0) return `rgba(0,0,0,${alpha})`
-        if(colourcode===1) return `rgba(255,215,0,${alpha})`
-        if(colourcode===2) return `rgba(116,78,163,${alpha})`
+        if(colourcode===1) return `rgba(100,100,100,${alpha})`
+        if(colourcode===2) return `rgba(255,215,0,${alpha})`
+        if(colourcode===3) return `rgba(116,78,163,${alpha})`
+        if(colourcode===4) return `rgba(247,99,0,${alpha})`
 
 
 
@@ -134,7 +136,7 @@ class Ray {
 
     }
 
-    cast(columnId) {
+    cast() {
 
 
         var horizontal = this.horizontalIntersect()
@@ -320,7 +322,6 @@ function keyReleased() {
 }
 
 function castAllRays() {
-    var columnId = 0;
 
 
     var rayAngle = player.rotationAngle - (FOV_ANGLE / 2);
@@ -373,6 +374,11 @@ function normalizeAngle(angle) {
 function setup() {
    var drawcanvas =createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
    drawcanvas.parent('canvas')
+
+
+
+
+
 }
 
 function update() {
