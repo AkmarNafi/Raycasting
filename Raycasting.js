@@ -2,11 +2,11 @@ const TILE_SIZE = 32;
 const MAP_NUM_ROWS = 11;
 const MAP_NUM_COLS = 15;
 
-const SCALE=0.3;
+const SCALE = 0.3;
 const WINDOW_WIDTH = MAP_NUM_COLS * TILE_SIZE;
 const WINDOW_HEIGHT = MAP_NUM_ROWS * TILE_SIZE;
 
-const FOV_ANGLE = 60 * (Math.PI / 180);
+const FOV_ANGLE = 80 * (Math.PI / 180);
 
 const WALL_STRIP_WIDTH = 1;
 const NUM_RAYS = WINDOW_WIDTH / WALL_STRIP_WIDTH;
@@ -42,10 +42,10 @@ class Map {
             for (var j = 0; j < MAP_NUM_COLS; j++) {
                 var tileX = j * TILE_SIZE;
                 var tileY = i * TILE_SIZE;
-                var tileColor = this.grid[i][j] == 1 ? "rgb(22,22,22)" : "rgb(52,52,52)";
-                noStroke()
+                var tileColor = this.grid[i][j] == 1 ? "rgb(22,22,22)" : "rgb(102,102,102)";
+                stroke(tileColor)
                 fill(tileColor);
-                rect(SCALE * tileX,SCALE * tileY,SCALE * TILE_SIZE,SCALE * TILE_SIZE);
+                rect(SCALE * tileX, SCALE * tileY, SCALE * TILE_SIZE, SCALE * TILE_SIZE);
             }
         }
     }
@@ -80,7 +80,7 @@ class Player {
     render() {
         noStroke();
         fill("white");
-        circle(SCALE * this.x,SCALE *  this.y, SCALE * this.radius);
+        circle(SCALE * this.x, SCALE * this.y, SCALE * this.radius);
 
     }
 }
@@ -101,6 +101,7 @@ class Ray {
 
         this.isRayFacingRight = this.rayAngle < 0.5 * Math.PI || this.rayAngle > 1.5 * Math.PI;
         this.isRayFacingLeft = !this.isRayFacingRight;
+
     }
 
     cast(columnId) {
@@ -112,8 +113,13 @@ class Ray {
         stroke('white');
 
         if (vertical == null) {
+
+            this.distance = calculatedistance(player.x, player.y, horizontal.x, horizontal.y);
+
             line(SCALE * player.x, SCALE * player.y, SCALE * horizontal.x, SCALE * horizontal.y)
         } else if (horizontal == null) {
+            this.distance = calculatedistance(player.x, player.y, vertical.x, vertical.y);
+
             line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x, SCALE * vertical.y)
 
 
@@ -121,17 +127,19 @@ class Ray {
 
 
             var horizontaldist = calculatedistance(player.x, player.y, horizontal.x, horizontal.y);
+
             var verticaldist = calculatedistance(player.x, player.y, vertical.x, vertical.y);
 
             if (horizontaldist <= verticaldist) {
+                this.distance = horizontaldist
 
 
-                line(SCALE * player.x,SCALE *  player.y,SCALE *  horizontal.x,SCALE * horizontal.y)
+                line(SCALE * player.x, SCALE * player.y, SCALE * horizontal.x, SCALE * horizontal.y)
 
 
             } else {
-
-                line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x,SCALE * vertical.y)
+                this.distance = verticaldist
+                line(SCALE * player.x, SCALE * player.y, SCALE * vertical.x, SCALE * vertical.y)
 
             }
         }
@@ -287,12 +295,30 @@ function castAllRays() {
 
     for (var i = 0; i < NUM_RAYS; i++) {
         var ray = new Ray(rayAngle);
-        ray.cast(columnId);
+        ray.cast();
         rays.push(ray);
 
         rayAngle += FOV_ANGLE / NUM_RAYS;
 
-        columnId++;
+
+    }
+}
+
+function render3dWalls() {
+
+
+    for (var i=0;i<rays.length; i++) {
+
+        var ray=rays[i];
+        var rayDistance = ray.distance* Math.cos(ray.rayAngle-player.rotationAngle)
+        var distanceToProjectionPlane = (WINDOW_WIDTH / 2) / Math.tan(FOV_ANGLE / 2)
+        var wallHeight = (TILE_SIZE / rayDistance) * distanceToProjectionPlane;
+
+        fill('rgba(255,50,0,0.6)');
+        noStroke();
+        rect(i*WALL_STRIP_WIDTH , (WINDOW_WIDTH/2) - (wallHeight/2),WALL_STRIP_WIDTH,wallHeight)
+
+
     }
 }
 
@@ -305,14 +331,19 @@ function normalizeAngle(angle) {
 }
 
 function setup() {
-    createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+   var drawcanvas =createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+   drawcanvas.parent('canvas')
 }
 
 function update() {
     player.update();
+
 }
 
 function draw() {
+
+
+    clear();
 
     update();
 
@@ -321,4 +352,8 @@ function draw() {
     player.render();
 
     castAllRays();
+
+    render3dWalls();
+
+
 }
